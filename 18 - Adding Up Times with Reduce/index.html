@@ -181,26 +181,35 @@
       Video 58
     </li>
   </ul>
+
 <script>
+//use spread operator to turn NodeList into an array
+const dataTime = [...document.querySelectorAll('[data-time]')];
 
-  const timeNodes = Array.from(document.querySelectorAll('[data-time]'));
+//first take each li element from the dataTime array
+//then take the timestamp using '.dataset.time'
+//declare the mins and secs variables by splitting the timestamp
+//use parseFloat() to convert the mins and secs from strings to numbers
+//add total using .reduce()
+const seconds = dataTime
+  .map(liElement => liElement.dataset.time)
+  .map(timestamp => {
+    const [mins, secs] = timestamp.split(':').map(parseFloat);
+    return (mins * 60) + secs;
+  })
+  .reduce((total, currentValue) => total + currentValue);
 
-  const seconds = timeNodes
-    .map(node => node.dataset.time)
-    .map(timeCode => {
-      const [mins, secs] = timeCode.split(':').map(parseFloat);
-      return (mins * 60) + secs;
-    })
-    .reduce((total, vidSeconds) => total + vidSeconds);
+//find how many hours of time we have
+//assign any leftover seconds to secondsLeft
+//use secondsLeft to find how many minutes of time we have
+//assign any leftover seconds to secondsLeft
+const hours = Math.floor(seconds / 3600);
+let secondsLeft = seconds % 3600;
+const mins = Math.floor(secondsLeft / 60);
+secondsLeft %= 60;
 
-    let secondsLeft = seconds;
-    const hours = Math.floor(secondsLeft / 3600);
-    secondsLeft = secondsLeft % 3600;
 
-    const mins = Math.floor(secondsLeft / 60);
-    secondsLeft = secondsLeft % 60;
-
-    console.log(hours, mins, secondsLeft);
+console.log(`${hours} hours ${mins} minutes ${secondsLeft} seconds`);
 
 </script>
 </body>
